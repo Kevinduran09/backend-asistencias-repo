@@ -1,20 +1,25 @@
-# Usar la imagen base de Node.js
-FROM node:16
+# Usa una imagen base de Node.js
+FROM node:18
 
-# Establecer el directorio de trabajo en el contenedor
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /usr/src/app
 
-# Copiar el archivo package.json y package-lock.json
+# Copia los archivos de configuración de Node.js (package.json y package-lock.json)
 COPY package*.json ./
 
-# Instalar las dependencias
+# Instala las dependencias de la aplicación
 RUN npm install
 
-# Copiar el resto de la aplicación
+# Instala las dependencias necesarias para SQLite (esto instalará las librerías C necesarias para que SQLite funcione en el contenedor)
+RUN apt-get update && apt-get install -y \
+  sqlite3 \
+  libsqlite3-dev
+
+# Copia todo el código fuente de tu aplicación al contenedor
 COPY . .
 
-# Exponer el puerto en el que se ejecuta la aplicación
+# Expón el puerto donde tu aplicación escuchará (en este caso, 3000)
 EXPOSE 3000
 
-# Comando de inicio de la aplicación
+# Comando para iniciar la aplicación con node app.js
 CMD ["node", "app.js"]
