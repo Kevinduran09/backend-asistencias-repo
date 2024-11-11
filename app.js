@@ -67,6 +67,20 @@ app.get('/asistencias', (req, res) => {
     });
 });
 
+
+
+app.delete('/limpiar-registros', (req, res) => {
+    const query = `DELETE FROM asistencias`;
+
+    db.run(query, function (err) {
+        if (err) {
+            console.error('Error al limpiar los registros:', err.message);
+            return res.status(500).json({ error: 'Error al limpiar los registros' });
+        }
+        res.status(200).json({ message: 'Todos los registros han sido eliminados' });
+    });
+});
+
 // Manejo de rutas no encontradas
 app.use((req, res) => {
     res.status(404).json({ error: 'Ruta no encontrada' });
