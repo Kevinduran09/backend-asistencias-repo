@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors'); // Importa el paquete CORS
 
 // Configuración de la aplicación
 const app = express();
@@ -9,6 +10,9 @@ const port = process.env.PORT || 3000; // Usa el puerto proporcionado por el ent
 
 // Middleware para manejar JSON
 app.use(bodyParser.json());
+
+// Habilitar CORS para todas las solicitudes
+app.use(cors());
 
 // Conexión a la base de datos SQLite
 const dbPath = path.join(__dirname, 'asistencias.db'); // Establece la ruta adecuada para la base de datos
@@ -67,8 +71,7 @@ app.get('/asistencias', (req, res) => {
     });
 });
 
-
-
+// Ruta para limpiar registros
 app.delete('/limpiar-registros', (req, res) => {
     const query = `DELETE FROM asistencias`;
 
